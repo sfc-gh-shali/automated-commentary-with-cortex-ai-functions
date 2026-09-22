@@ -43,38 +43,27 @@ flowchart TD
     style STORE fill:#e6f4ea,stroke:#34a853
 ```
 
-One SQL SELECT with AI_COMPLETE generates commentary for each row. The stored procedure
-(`SP_GENERATE_STARTER`) wraps this in fingerprint checks and MERGE persistence.
+One SQL SELECT with AI_COMPLETE generates commentary for each row.
 
-## Application architecture
+## Demo walkthrough
 
-```mermaid
-flowchart TD
-    subgraph Browser["React app (Vite)"]
-        T1["Tab 1 Report & Problem"]
-        T2["Tab 2 Build the SQL"]
-        T3["Tab 3 Commentary Results"]
-        T4["Tab 4 Execution & Next Steps"]
-    end
+### 01 / Report & Problem
 
-    subgraph Server["Express server :3001"]
-        API["/api/starter/* endpoints"]
-    end
+The source report:
 
-    subgraph SF["Snowflake"]
-        VPA["V_PROMPT_ALL"]
-        SP["SP_GENERATE_STARTER"]
-        TBL["AI_COMMENTARY"]
-    end
+![Tab 1 — Report & Problem](docs/tab1-report-problem.png)
 
-    Browser -->|"fetch /api/*"| API
-    API -->|"SQL REST (JWT auth)"| SF
+### 02 / Build the SQL
 
-    style Browser fill:#e8f0fe,stroke:#4285f4
-    style Server fill:#fff3e0,stroke:#e65100
-    style SF fill:#e6f4ea,stroke:#34a853
-```
+Select source columns, view the data dictionary, inspect the system prompt (preamble + 9 rules), choose an LLM, and preview the generated SQL or resolved prompt.
 
+![Tab 2 — Build the SQL](docs/tab2-build-sql.png)
+
+### 03 / Commentary Results
+
+Generate all rows with AI_COMPLETE, review AI-drafted commentary alongside metric context, and reset or regenerate as needed.
+
+![Tab 3 — Commentary Results](docs/tab3-commentary-results.png)
 
 ## Deploy
 
@@ -106,25 +95,13 @@ Replace `<connection>` with your Snowflake CLI connection name (see `snow connec
 The build script is idempotent (CREATE OR REPLACE throughout, deterministic seed data).
 
 
-## Demo walkthrough
+## Cleanup
 
-### 01 / Report & Problem
+Run `snowflake/cleanup.sql` to drop all demo objects and avoid recurring costs:
 
-The source report:
-
-![Tab 1 — Report & Problem](docs/tab1-report-problem.png)
-
-### 02 / Build the SQL
-
-Select source columns, view the data dictionary, inspect the system prompt (preamble + 9 rules), choose an LLM, and preview the generated SQL or resolved prompt.
-
-![Tab 2 — Build the SQL](docs/tab2-build-sql.png)
-
-### 03 / Commentary Results
-
-Generate all rows with AI_COMPLETE, review AI-drafted commentary alongside metric context, and reset or regenerate as needed.
-
-![Tab 3 — Commentary Results](docs/tab3-commentary-results.png)
+```bash
+snow sql -c <connection> -f snowflake/cleanup.sql
+```
 
 ## Handout
 
@@ -135,10 +112,3 @@ The `handout/` directory contains reusable assets that work independently of the
 
 The notebook assumes the demo SQL objects have been deployed via `build.sh`.
 
-## Cleanup
-
-Run `snowflake/cleanup.sql` to drop all demo objects and avoid recurring costs:
-
-```bash
-snow sql -c <connection> -f snowflake/cleanup.sql
-```
