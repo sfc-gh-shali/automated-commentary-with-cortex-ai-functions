@@ -106,31 +106,25 @@ Replace `<connection>` with your Snowflake CLI connection name (see `snow connec
 The build script is idempotent (CREATE OR REPLACE throughout, deterministic seed data).
 
 
-## Four-tab walkthrough
+## Demo walkthrough
 
 ### 01 / Report & Problem
 
-The source report, manual drafting problem, and one straight pipeline.
+The source report:
 
-![Tab 1 — Report & Problem](docs/tab1-report-problem.jpg)
+![Tab 1 — Report & Problem](docs/tab1-report-problem.png)
 
 ### 02 / Build the SQL
 
 Select source columns, view the data dictionary, inspect the system prompt (preamble + 9 rules), choose an LLM, and preview the generated SQL or resolved prompt.
 
-![Tab 2 — Build the SQL](docs/tab2-build-sql.jpg)
+![Tab 2 — Build the SQL](docs/tab2-build-sql.png)
 
 ### 03 / Commentary Results
 
 Generate all rows with AI_COMPLETE, review AI-drafted commentary alongside metric context, and reset or regenerate as needed.
 
-![Tab 3 — Commentary Results](docs/tab3-commentary-results.jpg)
-
-### 04 / Execution & Next Steps
-
-Reference architecture for nightly scheduled and arrival-driven execution, plus next steps (derived facts, response format, evaluation, operational controls).
-
-![Tab 4 — Execution & Next Steps](docs/tab4-execution.jpg)
+![Tab 3 — Commentary Results](docs/tab3-commentary-results.png)
 
 ## Handout
 
