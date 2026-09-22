@@ -1,0 +1,209 @@
+@import "tailwindcss";
+@import "./workspace.css";
+
+/*
+  Institutional palette. The audience reads risk reports for a living, so this
+  leans on a restrained neutral base with one accent per severity level rather
+  than a rainbow. Severity is the only place saturated colour is spent.
+*/
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* severity accents -- deliberately desaturated versus tailwind defaults */
+  --color-sev-l3: oklch(0.52 0.19 22);
+  --color-sev-l3-bg: oklch(0.96 0.03 22);
+  --color-sev-l2: #8a480d;
+  --color-sev-l2-bg: oklch(0.96 0.045 55);
+  /*
+    L1 sits deliberately far from L2 in both hue and chroma. At the original
+    values the two backgrounds differed only by hue at identical lightness and
+    chroma, so in a long scrolling table they read as the same colour and the
+    severity ladder collapsed.
+  */
+  --color-sev-l1: #70600d;
+  --color-sev-l1-bg: oklch(0.975 0.055 100);
+  --color-sev-near: #225f90;
+  --color-sev-near-bg: oklch(0.96 0.025 245);
+  --color-sev-none: #286443;
+  --color-sev-none-bg: oklch(0.96 0.02 155);
+  --color-sev-nodata: #536276;
+  --color-sev-nodata-bg: oklch(0.96 0.005 260);
+}
+
+:root {
+  --background: #f5f7fa;
+  --foreground: oklch(0.21 0.015 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.015 260);
+  --muted: oklch(0.97 0.004 260);
+  --muted-foreground: oklch(0.52 0.014 260);
+  --border: oklch(0.92 0.005 260);
+  --input: oklch(0.92 0.005 260);
+  --primary: #1763ad;
+  --primary-foreground: oklch(0.99 0.002 260);
+  --accent: oklch(0.96 0.01 245);
+  --accent-foreground: oklch(0.3 0.05 245);
+  --ring: oklch(0.42 0.11 245);
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-ring: var(--ring);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  /*
+    Figures must line up column to column. Every number in this app comes out of
+    SQL already formatted, so the only job left is to stop proportional digits
+    from making a breach column look ragged.
+  */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+}
+
+/*
+  Semantic colour classes.
+
+  Written as plain CSS rather than Tailwind arbitrary values on purpose. The
+  `bg-[--my-var]` form does not resolve under Tailwind v4 -- it silently
+  compiles to a transparent background, which is exactly the kind of failure
+  that survives a code review and then eats the severity colour coding in a live
+  demo. Naming the combinations here makes them impossible to get wrong and
+  keeps the alpha blends in one place.
+*/
+@layer components {
+  .sev-l3, .sev-l2, .sev-l1, .sev-near, .sev-none, .sev-nodata { border-width: 1px; }
+
+  .sev-l3 {
+    color: var(--color-sev-l3);
+    background-color: var(--color-sev-l3-bg);
+    border-color: color-mix(in oklab, var(--color-sev-l3) 25%, transparent);
+  }
+  .sev-l2 {
+    color: var(--color-sev-l2);
+    background-color: var(--color-sev-l2-bg);
+    border-color: color-mix(in oklab, var(--color-sev-l2) 25%, transparent);
+  }
+  .sev-l1 {
+    color: var(--color-sev-l1);
+    background-color: var(--color-sev-l1-bg);
+    border-color: color-mix(in oklab, var(--color-sev-l1) 30%, transparent);
+  }
+  .sev-near {
+    color: var(--color-sev-near);
+    background-color: var(--color-sev-near-bg);
+    border-color: color-mix(in oklab, var(--color-sev-near) 25%, transparent);
+  }
+  .sev-none {
+    color: var(--color-sev-none);
+    background-color: var(--color-sev-none-bg);
+    border-color: color-mix(in oklab, var(--color-sev-none) 25%, transparent);
+  }
+  .sev-nodata {
+    color: var(--color-sev-nodata);
+    background-color: var(--color-sev-nodata-bg);
+    border-color: color-mix(in oklab, var(--color-sev-nodata) 30%, transparent);
+  }
+
+  .dot-l3     { background-color: var(--color-sev-l3); }
+  .dot-l2     { background-color: var(--color-sev-l2); }
+  .dot-l1     { background-color: var(--color-sev-l1); }
+  .dot-near   { background-color: var(--color-sev-near); }
+  .dot-none   { background-color: var(--color-sev-none); }
+  .dot-nodata { background-color: var(--color-sev-nodata); }
+
+  .tx-l3     { color: var(--color-sev-l3); }
+  .tx-l2     { color: var(--color-sev-l2); }
+  .tx-near   { color: var(--color-sev-near); }
+  .tx-none   { color: var(--color-sev-none); }
+  .tx-nodata { color: var(--color-sev-nodata); }
+  .tx-primary { color: var(--primary); }
+
+  /* Row tint for a line whose upstream feed is missing. */
+  .row-nodata {
+    background-color: color-mix(in oklab, var(--color-sev-nodata-bg) 60%, transparent);
+  }
+
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+  .btn-primary:hover:not(:disabled) { opacity: 0.9; }
+
+  /* Muted primary surface: narration strip, highlighted rows, soft chips. */
+  .panel-primary {
+    border-width: 1px;
+    border-color: color-mix(in oklab, var(--primary) 20%, transparent);
+    background-color: color-mix(in oklab, var(--primary) 7%, transparent);
+  }
+  .chip-primary {
+    border-width: 1px;
+    border-color: color-mix(in oklab, var(--primary) 25%, transparent);
+    background-color: color-mix(in oklab, var(--primary) 10%, transparent);
+    color: var(--primary);
+  }
+  .row-selected {
+    background-color: color-mix(in oklab, var(--primary) 7%, transparent);
+  }
+  .row-current {
+    background-color: color-mix(in oklab, var(--primary) 5%, transparent);
+  }
+  /*
+    A walkthrough example. Split into two classes on purpose: the accent bar has
+    to survive selection. When a highlighted row is also the selected row, the
+    selected background wins but the bar stays, so the row does not stop looking
+    like an example just because someone clicked it.
+  */
+  .row-highlight {
+    background-color: color-mix(in oklab, var(--primary) 6%, transparent);
+  }
+  .row-highlight:hover {
+    background-color: color-mix(in oklab, var(--primary) 10%, transparent);
+  }
+  .row-accent {
+    box-shadow: inset 3px 0 0 0 var(--primary);
+  }
+
+  /* <details> affordance: swap the hint text when the section is open. */
+  details[open] .when-closed {
+    display: none;
+  }
+  details:not([open]) .when-open {
+    display: none;
+  }
+  .rail-step-done {
+    border-color: color-mix(in oklab, var(--primary) 30%, transparent);
+    background-color: color-mix(in oklab, var(--primary) 10%, transparent);
+    color: var(--primary);
+  }
+  .tx-accent-fg { color: var(--accent-foreground); }
+  .border-primary-solid { border-color: var(--primary); }
+}

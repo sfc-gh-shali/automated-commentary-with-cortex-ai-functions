@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.vite/
+
+# secrets -- server/.env holds the account, user and the PATH to the private key.
+# The key itself stays in ~/.snowflake/ and is never copied into this repo.
+.env
+.env.*
+!.env.example
+
+# python virtualenv (was only needed for the retired Streamlit app)
+.venv/
+__pycache__/
+
+# os noise
+.DS_Store
+
+# typescript build info
+*.tsbuildinfo
+
+# supporting files
+misc/
+
+# CoCo memory and plan files
+.snowflake/

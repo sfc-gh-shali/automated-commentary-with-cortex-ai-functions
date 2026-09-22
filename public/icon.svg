@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!--
+    A limit line with a series crossing it: the whole demo in one mark.
+    The bar that breaks the threshold is the only saturated element.
+  -->
+  <rect width="32" height="32" rx="6" fill="#1e293b"/>
+  <line x1="5" y1="12.5" x2="27" y2="12.5" stroke="#94a3b8" stroke-width="1.25" stroke-dasharray="3 2"/>
+  <rect x="6"  y="18" width="3.5" height="7"  rx="1" fill="#64748b"/>
+  <rect x="11.5" y="16" width="3.5" height="9"  rx="1" fill="#64748b"/>
+  <rect x="17" y="14" width="3.5" height="11" rx="1" fill="#94a3b8"/>
+  <rect x="22.5" y="8"  width="3.5" height="17" rx="1" fill="#e11d48"/>
+</svg>
